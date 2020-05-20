@@ -1,0 +1,32 @@
+ {                
+        ArduinoMessage externalTemperature; 
+    
+        long millis = (new Date()).getTime();
+        
+        externalTemperature = new ArduinoMessage();
+        externalTemperature.id = millis;
+        externalTemperature.sensorType = ArduinoSensorTypes.EXTERNAL_TEMPERATURE;
+        externalTemperature.sensorValue = 98.6;
+        
+        List<ArduinoMessage> newMessages = new ArrayList();
+        newMessages.add(externalTemperature);        
+        
+        response.setContentType("text/html");
+        try (PrintWriter out = response.getWriter()) 
+        {
+            for(ArduinoMessage message : newMessages)
+            {
+                String s = message.toLine();
+                out.println(s);
+            }
+        }
+    }    
+
+    @Override
+    public void init() throws ServletException 
+    {
+        super.init();
+        
+        logger = Logger.getLogger(MockRawArduinoServlet.class.getName());
+    }
+}
